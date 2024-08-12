@@ -3,15 +3,13 @@ const { slug } = useRoute().params
 const url = slug && slug.length > 0 ? slug.join('/') : 'home'
  
 const isPreview = useRuntimeConfig().public.NODE_ENV !== 'production'
-const { locale } = useI18n()
 const resolveRelations = ['popular-articles.articles']
  
 const { data: story, status } = await useAsyncData(
-  `${locale.value}-${url}`,
+  `${url}`,
   async () => {
     const { data } = await useStoryblokApi().get(`cdn/stories/${url.replace(/\/$/, '')}`, {
       version: isPreview ? 'draft' : 'published',
-      language: locale.value,
       resolve_relations: resolveRelations
     })
     return data?.story
